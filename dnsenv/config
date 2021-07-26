@@ -1,0 +1,24 @@
+Host serverb
+  HostName 192.168.0.13
+  Port 22
+  User root
+  StrictHostKeyChecking no
+  IdentityFile /root/machine_rsa
+  ForwardX11 yes
+
+
+Host serverc
+  HostName 192.168.0.14
+  Port 22
+  User root
+  StrictHostKeyChecking no
+  IdentityFile /root/machine_rsa
+  ForwardX11 yes
+
+Host science_server
+  HostName 192.168.0.101
+  Port 22
+  User root
+  StrictHostKeyChecking no
+  IdentityFile /root/machine_rsa
+  ForwardX11 yes
