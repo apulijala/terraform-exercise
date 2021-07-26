@@ -1,0 +1,170 @@
+Steps for installing name server. 
+On unix side. 
+1) yum install bind bind-utils.
+2) All files you create/modify need to have correct permissions set using chgrp. 
+chgrp named /etc/named.conf /etc/named.backend.example.com.zone /var/lib/backend.example.com. /var/lib/192.168.0.0.zone. 
+3) if didfferent directory make sure to use correct linux permissions. 
+4) open all the firewalls. 
+firewall-cmd --add-service dns --permanent; firewall-cmd --reload. 
+Test
+firewall-cmd --list-services. 
+
+Logging. 
+journalctl -u named -n 10. 
+
+Ohter logging in 
+named.conf look for channel and also learn to enable debug logging there. Look for any problematic . learn to alter the security settings. 
+logging {
+        channel default_debug {
+                file "data/named.run";
+                severity dynamic;
+        };
+};
+
+
+2) Creating zone files and zone definition file. 
+    a) put a reference for zone definton file in /etc/named.conf. don't create zones directly there. convention is put it in /etc/ directory. 
+        include "/etc/backend.example.com";
+    
+    b) Verify the integrity of the named.conf by using named-checkconf. 
+       i) start from a good zone defition file. 
+       
+       zone "backend.example.com" IN {
+        type master;
+        file "backend.example.com";
+        forwarders {};
+};
+    note backend.example.com is the name of the zone you are trying to manage. if you are not careful with it, it will be a problem. 
+    it has to match it. if directory is not mentioned in the file directive it will default to /var/named. 
+    
+    c) Verify the zone integrity with the
+        named-checkzone backend.example.com backend.example.com zone. 
+       
+       
+ Common errors are missing ; not defining A or AAAA record for authoritative name server. 
+
+example zone defintion file. 
+
+$ORIGIN backend.example.com. // if this is not given it will get it from zone defition in zone file. Improtanat to put . at end here. otherewise it will add backend.example.com to it 
+$TTL 3d
+@               SOA serverb.backend.example.com. root.serverb.backend.example.com. (
+
+        7;      serial
+        4h;     refresh after every 4 hours
+        1h;     retry after every 1 hour. 
+        1w;     expire after one week if no response from the server. 
+        5h;     negative query cache. 
+); 
+
+
+;server         class        record type                address
+                 IN             NS                       serverb
+
+servera           IN            A                      192.168.0.12
+serverb           IN            A                      192.168.0.13
+
+servera will now be servera.backend.example.com
+if you want to define full name fo servera
+servera.backend.example.com. . means don't add anything to it. 
+
+Zone delegatin. This one worked form . I had to put $ORIGIN Directive to signify the newer section. 
+Culd not do for reverse zones. Chandra question. 
+----------------------
+; $ORIGIN               science.backend.example.com. 
+science                 IN              NS              science-server
+science-server.science.backend.example.com.     IN A                    192.168.0.101
+
+
+Debugging common problems.
+1) if the thing being search for is way off like 
+dig serverb.example.com @192.168.0.13. you will get refused. 
+ ->>HEADER<<- opcode: QUERY, status: REFUSED, id: 2544
+
+2) if the thing being searched is close you will get NXDOMAIN. 
+
+3) if testing reverse zone make sure you use dig -x 192.168.0.12 @192.168.0.14
+
+4) check permisson on the file. 
+
+Other way to set subdomain delegation.  Chandra question 
+----------------------------------
+make the name server that is delegating slve of another name server. Need to test this approach thoroughly. 
+zone "science.backend.example.com" IN {
+        type slave;
+        file "slave.science.backend.example.com";
+        masters {192.168.0.101;};
+};
+
+
+Setting up slave zones. 
+----------------------
+Note: don't create files for slave zones. they get transferred from the master. 
+
+zone "backend.example.com" IN {
+        type slave;
+        file "slaves/backend.example.com";
+        masters {192.168.0.13;};
+        forwarders {};
+};
+
+When testing zone transfers, add a new transfer to the primary and modify the serial number. 
+
+That's all you have to do. 
+
+Enable DNSSEC between masters and servers.
+---------------------------------
+
+dig serverb.example.com @192.168.0.13
+dig serverb.backend.example.com @192.168.0.13
+ dig -x 192.168.0.101 @192.168.0.13
+
+
+dnssec-keygen -a HMAC-MD5 -b 128 -n HOST serverb (I thinkg serverb does not really matter)
+HMAC-MD5 algorithm to encrypt. choose from the list. 
+b 128 is the number of bits for encryption. 
+---------------------------------------------------------
+Then it will generate two keys 
+Kserverb.+157+03491.key #  this is the one that contains key material. 
+Kserverb.+157+03491.private
+
+On master side. 
+1) define the key 
+dnssec-enable yes;
+dnssec-validation yes;
+key serverb {
+        algorithm hmac-md5;
+        secret "WlnJ67erXFehK2X06cPe2Q==";
+
+};
+
+I think it can be any name. key should be from. 
+cat Kserverb.+157+03491.key 
+serverb. IN KEY 512 3 157 WlnJ67erXFehK2X06cPe2Q==
+
+.private file i had to ignore. 
+
+3) 
+on the slave side, put the same key . 
+
+key serverb {
+        algorithm    hmac-md5;
+        secret       "WlnJ67erXFehK2X06cPe2Q==";
+
+};
+
+server 192.168.0.13 {
+
+        keys serverb;
+};
+
+
+Testing . 
+add a new server on the  master end and change the serial number and
+verify the transfer is happening. 
+
+All server config files are in . 
+https://github.com/apulijala/terraform-exercise.git and in directory
+terraform-exercise/dnsenv/
+on local machien they are in. 
+/home/arvind/terraform-exercise
+
