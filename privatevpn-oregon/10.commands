@@ -1,0 +1,6 @@
+sudo service network start
+yum install -y openswan
+sysctl --system
+service ipsec start
+ipsec verify
+ping -c 1 172.16.0.5

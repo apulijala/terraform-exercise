@@ -7,7 +7,7 @@ public-subnets = {
     "cidr_block" = "192.168.0.0/24"
   }
 }
-private_ips = ["192.168.0.13", "192.168.0.14", "192.168.0.101"] # will pick it from here instead of defaults.
+private_ips = ["192.168.0.13", "192.168.0.14", "192.168.0.101", "192.168.0.105"] # will pick it from here instead of defaults.
 private-subnets = {
 
 }

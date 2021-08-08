@@ -22,6 +22,9 @@ variable "vpc_id" {
 
 }
 
+variable "source_dest_check" {
+  default = true
+}
 variable "prvt_ip" {
   default = false
 }
