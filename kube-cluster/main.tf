@@ -20,11 +20,12 @@ data "template_file" "instances" {
 module "instances" {
   // count = length(var.private_ips)
   source = "../instance"
-  ami = "ami-0ad8ecac8af5fc52b"
+  # ami = "ami-0ad8ecac8af5fc52b" # did not work. 
+  ami = "ami-0035e9a03b5cd78c7"
   subnet_id = module.vpc.public_subnet_ids[0]
   region = var.region
   assoc_public_ip = true
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   user_data = data.template_file.instances.rendered
   prvt_ip = true
   private_ips = var.private_ips
@@ -37,19 +38,3 @@ data "template_file" "install_ansible" {
   template = "${file("${path.module}/install_ansible.sh")}"
 }
 
-module "bastion" {
-  // count = length(var.private_ips)
-  source = "../instance"
-  ami = "ami-0ad8ecac8af5fc52b"
-  key_name = "practicalnetworking"
-  subnet_id = module.vpc.public_subnet_ids[0]
-  region = var.region
-  user_data =   data.template_file.install_ansible.rendered
-  assoc_public_ip = true
-  instance_type = "t2.micro"
-  prvt_ip = false
-  inst_count = 5 // = var.private_ips[count.index]
-  private_ips = []
-  vpc_id = module.vpc.vpc_id
-
-}

@@ -20,7 +20,8 @@ data "template_file" "instances" {
 module "instances" {
   // count = length(var.private_ips)
   source = "../instance"
-  ami = "ami-0ad8ecac8af5fc52b"
+  # ami = "ami-0ad8ecac8af5fc52b"
+  ami = "ami-06a0b4e3b7eb7a300"
   subnet_id = module.vpc.public_subnet_ids[0]
   region = var.region
   assoc_public_ip = true
@@ -40,7 +41,7 @@ data "template_file" "install_ansible" {
 module "bastion" {
   // count = length(var.private_ips)
   source = "../instance"
-  ami = "ami-0ad8ecac8af5fc52b"
+  ami = "ami-06a0b4e3b7eb7a300"
   key_name = "practicalnetworking"
   subnet_id = module.vpc.public_subnet_ids[0]
   region = var.region

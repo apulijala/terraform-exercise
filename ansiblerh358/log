@@ -1,0 +1,26 @@
+[
+    {
+        "DestinationCidrBlock": "172.17.0.0/16",
+        "TransitGatewayAttachments": [
+            {
+                "ResourceId": "vpc-073c0754d2ee6f4c5",
+                "TransitGatewayAttachmentId": "tgw-attach-0253b9dcae61dde99",
+                "ResourceType": "vpc"
+            }
+        ],
+        "Type": "propagated",
+        "State": "active"
+    },
+    {
+        "DestinationCidrBlock": "172.31.0.0/16",
+        "TransitGatewayAttachments": [
+            {
+                "ResourceId": "vpc-5d10c120",
+                "TransitGatewayAttachmentId": "tgw-attach-0dc0ea901a99b0d51",
+                "ResourceType": "vpc"
+            }
+        ],
+        "Type": "propagated",
+        "State": "active"
+    }
+]

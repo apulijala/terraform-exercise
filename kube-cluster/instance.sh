@@ -7,7 +7,7 @@ LOGFILE="/tmp/log"
 id >> "$LOGFILE"
 echo "staring the script" >> "$LOGFILE"
 
-hostnamectl set-hostname bastion
+
 
 # set the command line for easy use.
 echo 'alias c=clear; set -o vi' >> /etc/profile
@@ -33,14 +33,3 @@ echo "All done" >> "$LOGFILE"
 # Install and enable firewalld.
 yum install -y firewalld
 systemctl enable --now firewalld
-
-# Put correct permissions on ssh config file.
-chmod 600 /root/.ssh/config
-
-# Install ansible. 
-yum install -y python3
-pip3 install virtualenv
-python3 -m virtualenv ansible
-source ansible/bin/activate
-python3 -m  pip install ansible
-

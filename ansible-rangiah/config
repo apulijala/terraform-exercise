@@ -1,0 +1,33 @@
+Host servera
+  HostName 172.25.250.10
+  Port 22
+  User root
+  StrictHostKeyChecking no
+  IdentityFile /root/machine_rsa
+  ForwardX11 yes
+
+
+Host serverb
+  HostName 172.25.250.11
+  Port 22
+  User root
+  StrictHostKeyChecking no
+  IdentityFile /root/machine_rsa
+  ForwardX11 yes
+
+
+Host serverc
+  HostName 172.25.250.12
+  Port 22
+  User root
+  StrictHostKeyChecking no
+  IdentityFile /root/machine_rsa
+  ForwardX11 yes
+
+Host serverd
+  HostName 172.25.250.13
+  Port 22
+  User root
+  StrictHostKeyChecking no
+  IdentityFile /root/machine_rsa
+  ForwardX11 yes
