@@ -48,8 +48,8 @@ module "bastion" {
   assoc_public_ip = true
   instance_type = "t2.micro"
   prvt_ip = false
-  inst_count = 5 // = var.private_ips[count.index]
-  private_ips = []
+  // inst_count = 5 // = var.private_ips[count.index]
+  private_ips = ["172.25.250.21"]
   vpc_id = module.vpc.vpc_id
 
 }

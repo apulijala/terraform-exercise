@@ -11,9 +11,9 @@ resource "aws_instance" "my_instance" {
   source_dest_check = var.source_dest_check
   key_name = var.key_name
   user_data = var.user_data
-  private_ip = var.prvt_ip ? var.private_ips[count.index] :  ""
+  // private_ip = var.prvt_ip ? var.private_ips[count.index] : var.prvt_ip
+  private_ip = var.private_ips[count.index]
   // vpc_security_group_ids = var.sec_group_id
-
 
 }
 
