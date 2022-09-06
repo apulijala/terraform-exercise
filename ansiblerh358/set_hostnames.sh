@@ -1,7 +1,12 @@
 #!/bin/bash 
-
-ssh servera hostnamectl set-hostname servera
-ssh serverb hostnamectl set-hostname serverb
-ssh serverc hostnamectl set-hostname serverc
-ssh serverd hostnamectl set-hostname serverd
-
+for machine in servera serverb serverc serverd
+do
+        ssh  "$machine" groupadd admin
+        ssh "$machine" hostnamectl set-hostname "$machine"
+        ssh "$machine"  'echo "%admin        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers.d/admin'
+        for user in devops student
+        do
+              ssh "$machine" useradd -G admin "$user"
+              ssh "$machine" echo "redhat" | passwd --stdin "$user"
+        done
+done

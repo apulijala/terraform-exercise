@@ -1,5 +1,5 @@
 Host servera
-  HostName 172.25.250.10
+  HostName 172.31.16.21
   Port 22
   User root
   StrictHostKeyChecking no
@@ -8,7 +8,7 @@ Host servera
 
 
 Host serverb
-  HostName 172.25.250.11
+  HostName 172.31.16.22
   Port 22
   User root
   StrictHostKeyChecking no
@@ -17,7 +17,7 @@ Host serverb
 
 
 Host serverc
-  HostName 172.25.250.12
+  HostName 172.31.16.23
   Port 22
   User root
   StrictHostKeyChecking no
@@ -25,7 +25,42 @@ Host serverc
   ForwardX11 yes
 
 Host serverd
-  HostName 172.25.250.13
+  HostName 172.31.16.24
+  Port 22
+  User root
+  StrictHostKeyChecking no
+  IdentityFile /root/machine_rsa
+  ForwardX11 yes
+
+
+Host servera.lab.example.com
+  HostName 172.31.16.21
+  Port 22
+  User root
+  StrictHostKeyChecking no
+  IdentityFile /root/machine_rsa
+  ForwardX11 yes
+
+
+Host serverb.lab.example.com
+  HostName 172.31.16.22
+  Port 22
+  User root
+  StrictHostKeyChecking no
+  IdentityFile /root/machine_rsa
+  ForwardX11 yes
+
+
+Host serverc.lab.example.com
+  HostName 172.31.16.23
+  Port 22
+  User root
+  StrictHostKeyChecking no
+  IdentityFile /root/machine_rsa
+  ForwardX11 yes
+
+Host serverd.lab.example.com
+  HostName 172.31.16.24
   Port 22
   User root
   StrictHostKeyChecking no
